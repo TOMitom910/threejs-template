@@ -5,7 +5,7 @@ Vite + Three.js + lil-gui + GSAP + stats.js
 ## Nouveau projet
 
 ```bash
-npx degit TON_PSEUDO/threejs-template mon-projet
+npx degit TOMitom910/threejs-template mon-projet
 cd mon-projet
 npm install
 npm run dev
