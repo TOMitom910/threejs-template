@@ -32,8 +32,8 @@ export default class Experience
         this.setObjects();
         this.setResize();
 
-        this.clock = new THREE.Clock();
-        this.renderer.setAnimationLoop(() => this.update());
+        this.timer = new THREE.Timer();
+        this.tick();
     }
 
     setDebug()
@@ -66,28 +66,6 @@ export default class Experience
 
         this.gltfLoader = new GLTFLoader(this.loadingManager);
         this.gltfLoader.setDRACOLoader(this.dracoLoader);
-
-        /* Exemples (mets tes fichiers dans static/) :
-
-        const texture = this.textureLoader.load('/textures/color.jpg');
-        texture.colorSpace = THREE.SRGBColorSpace;
-
-        this.gltfLoader.load('/models/model.glb', (gltf) => {
-            this.scene.add(gltf.scene);
-        });
-
-        this.hdrLoader.load('/environmentMaps/env.hdr', (envMap) => {
-            envMap.mapping = THREE.EquirectangularReflectionMapping;
-            this.scene.environment = envMap;
-            this.scene.background = envMap;
-        });
-
-        const cubeMap = this.cubeTextureLoader.load([
-            '/environmentMaps/px.png', '/environmentMaps/nx.png',
-            '/environmentMaps/py.png', '/environmentMaps/ny.png',
-            '/environmentMaps/pz.png', '/environmentMaps/nz.png'
-        ]);
-        */
     }
 
     setScene()
@@ -180,11 +158,12 @@ export default class Experience
         });
     }
 
-    update()
+    tick()
     {
         if(this.stats) this.stats.begin();
 
-        const delta = this.clock.getDelta();
+        this.timer.update();
+        const delta = this.timer.getDelta();
 
         this.cube.rotation.x += delta * this.rotationSpeed;
         this.cube.rotation.y += delta * this.rotationSpeed * 1.3;
@@ -193,5 +172,7 @@ export default class Experience
         this.renderer.render(this.scene, this.camera);
 
         if(this.stats) this.stats.end();
+
+        window.requestAnimationFrame(() => this.tick());
     }
 }
